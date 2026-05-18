@@ -20,27 +20,24 @@ db = client["ISIS2304A17202610"]
 def inicio():
     return {"estado": "API funcionando correctamente"}
 
-# -----------------------------------------
-# SECCIÓN: COMENTARIOS
-# -----------------------------------------
+# ----------------------------------------------------------------------
+# 6 y 7. SECCIÓN: COMENTARIOS (Colección: comentarios_bares)
+# ----------------------------------------------------------------------
 @app.get('/bares/{bar_id}/comentarios')
 def get_comentarios(bar_id: int):
-    
-    comentarios = list(db["comentarios"].find({"bar_id": bar_id}, {"_id": 0}))
+    comentarios = list(db["comentarios_bares"].find({"bar_id": bar_id}, {"_id": 0}))
     return comentarios
 
 @app.post('/bares/{bar_id}/comentarios')
 def post_comentario(bar_id: int, datos: dict):
     datos['bar_id'] = bar_id
-    datos['fecha']  = datetime.now().isoformat()
-    
-    db["comentarios"].insert_one(datos)
-    
+    datos['fecha'] = datetime.now().isoformat()
+    db["comentarios_bares"].insert_one(datos)
     return {'mensaje': 'Comentario guardado exitosamente'}
 
-# -----------------------------------------
-# SECCIÓN: EVENTOS
-# -----------------------------------------
+# ----------------------------------------------------------------------
+# 8 y 9. SECCIÓN: EVENTOS (Colección: eventos)
+# ----------------------------------------------------------------------
 @app.get('/bares/{bar_id}/eventos')
 def get_eventos(bar_id: int):
     eventos = list(db["eventos"].find({"bar_id": bar_id}, {"_id": 0}))
@@ -50,7 +47,5 @@ def get_eventos(bar_id: int):
 def post_evento(bar_id: int, datos: dict):
     datos['bar_id'] = bar_id
     datos['fecha_creacion'] = datetime.now().isoformat()
-    
     db["eventos"].insert_one(datos)
-    
     return {'mensaje': 'Evento registrado exitosamente'}
